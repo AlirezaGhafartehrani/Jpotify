@@ -1,4 +1,3 @@
-package GUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,13 +12,12 @@ public class Frame {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(900, 556));
-        frame.setVisible(true);
         frame.setLayout (new BorderLayout());
         frame.setLocation (250,100);
 
         //left panel
         JPanel leftPanel = new JPanel(new FlowLayout());
-        Dimension leftPanelDim = new Dimension(150, Toolkit.getDefaultToolkit().getScreenSize().height);
+        Dimension leftPanelDim = new Dimension(150, 556);
         leftPanel.setPreferredSize(leftPanelDim);
 
         DefaultListModel listModelLibrary = new DefaultListModel();
@@ -27,9 +25,9 @@ public class Frame {
         listModelLibrary.addElement(" Album");
         listModelLibrary.addElement(" Artist");
         JList libraryList = new JList(listModelLibrary);
-//        JScrollPane scrollPane = new JScrollPane();
-//        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 
         DefaultListModel listModelplaylist = new DefaultListModel();//list of your all playlist
@@ -87,7 +85,7 @@ public class Frame {
         //East panel
         JPanel eastPanel = new JPanel(new FlowLayout());
         eastPanel.setPreferredSize(leftPanelDim);
-        eastPanel.setBackground(Color.GREEN);
+        eastPanel.setBackground(Color.GRAY);
         JLabel fActivity = new JLabel(" Friend Activity");
         fActivity.setPreferredSize(LabelSize);
         fActivity.setForeground(Color.WHITE);
@@ -143,7 +141,7 @@ public class Frame {
 
         //Song slider
         JSlider musicSlider = new JSlider();
-        Dimension musicSliderDim = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width - 300,30);
+        Dimension musicSliderDim = new Dimension(600 ,30);
         southPanel.add(musicSlider, BorderLayout.CENTER);
 
         //Volume slider
@@ -159,14 +157,14 @@ public class Frame {
 //        speakers.add(voloum);
         southPanel.add(voloum, BorderLayout.EAST);
 
-        Dimension southPanelDim = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 100);
+        Dimension southPanelDim = new Dimension(900 , 100);
         southPanel.setBackground(Color.lightGray);
         frame.add(southPanel, BorderLayout.SOUTH);
 
 
         // North
         JPanel northPanel = new JPanel(new FlowLayout());
-        Dimension northPanelDim = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 30);
+        Dimension northPanelDim = new Dimension(900 , 30);
         northPanel.setPreferredSize(northPanelDim);
         JLabel add_music_to_libraryLabel = new JLabel("Add Music To Library");
         Dimension addMtoL = new Dimension(150, 30);
@@ -201,11 +199,8 @@ public class Frame {
 
 
         ///////////
-        Dimension max_dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension min_dimension = new Dimension(1500, 1200);
-        frame.setMinimumSize(min_dimension);
-        frame.setMaximumSize(max_dimension);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+
         frame.setVisible(true);
 
     }
