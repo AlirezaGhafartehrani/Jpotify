@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +6,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Frame {
-    JFrame frame;
+    private JFrame frame;
+    private ArrayList<Object> centerPanelArrayList;
+    private ArrayList<Object> eastPanelArrayList;
+    private ArrayList<Object> northPanelArrayList;
+    private ArrayList<Object> southPanelArrayList;
+    private ArrayList<Object> leftPanelArrayList;
+
 
     public Frame() {
         frame = new JFrame();
@@ -41,7 +47,7 @@ public class Frame {
 
         Dimension menuListDim = new Dimension(150, 70);
         Dimension libListdim = new Dimension(150, 70);
-        Dimension playlisListdim = new Dimension(150, 300);
+        Dimension playlisListdim = new Dimension(150, 230);
         menuList.setPreferredSize(menuListDim);
         libraryList.setPreferredSize(libListdim);
         playlistList.setPreferredSize(playlisListdim);
@@ -65,8 +71,8 @@ public class Frame {
         JButton artworkP = new JButton();
         artworkP.setBackground(Color.lightGray);
         try {
-            BufferedImage img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\2.jpg"));
-            BufferedImage fimg = new BufferedImage(150, 100, img.getType());
+            BufferedImage img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\1.jpg"));
+            BufferedImage fimg = new BufferedImage(150, 150, img.getType());
             artworkP.setIcon(new ImageIcon(img));
 
         } catch (Exception ex) {
@@ -115,7 +121,7 @@ public class Frame {
         play.setPreferredSize(playerButtonSize);
         play.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Mohammad Sadra\\IdeaProjects\\FP AP\\src\\pause.png"));//didnt work?!
+            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\pause.png"));//didnt work?!
             play.setIcon(new ImageIcon(img));
 
         } catch (Exception ex) {
@@ -126,7 +132,7 @@ public class Frame {
         pNext.setPreferredSize(playerButtonSize);
         pNext.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Mohammad Sadra\\IdeaProjects\\FP AP\\src\\next.png"));//didnt work?!
+            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\next.png"));//didnt work?!
             pNext.setIcon(new ImageIcon(img));
 
         } catch (Exception ex) {
@@ -137,7 +143,7 @@ public class Frame {
         privios.setPreferredSize(playerButtonSize);
         privios.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Mohammad Sadra\\IdeaProjects\\FP AP\\src\\pr.png"));//didnt work?!
+            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\2.jpg"));//didnt work?!
             privios.setIcon(new ImageIcon(img));
 
         } catch (Exception ex) {
@@ -194,7 +200,7 @@ public class Frame {
         northPanel.add(signIn);
         JLabel profileIcon = new JLabel();
         try {
-            BufferedImage img = ImageIO.read(new File("C:\\Users\\Mohammad Sadra\\IdeaProjects\\FP AP\\src\\profile.jpg"));
+            BufferedImage img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\3.jpg"));
             BufferedImage fimg = new BufferedImage(30, 30, img.getType());
             profileIcon.setIcon(new ImageIcon(fimg));
 
