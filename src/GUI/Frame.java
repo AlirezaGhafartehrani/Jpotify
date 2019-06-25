@@ -17,45 +17,56 @@ public class Frame {
 
         //left panel
         JPanel leftPanel = new JPanel(new FlowLayout());
-        Dimension leftPanelDim = new Dimension(150, 556);
+        Dimension leftPanelDim = new Dimension(150, 500);
         leftPanel.setPreferredSize(leftPanelDim);
 
+        DefaultListModel listModelMenu = new DefaultListModel();
+        listModelMenu.addElement(" Home");
+        listModelMenu.addElement(" Browse");
+        listModelMenu.addElement(" Radio");
+        JList menuList = new JList(listModelMenu);
+
         DefaultListModel listModelLibrary = new DefaultListModel();
-        listModelLibrary.addElement(" Music");
-        listModelLibrary.addElement(" Album");
-        listModelLibrary.addElement(" Artist");
+        listModelLibrary.addElement("  Music");
+        listModelLibrary.addElement("  Album");
+        listModelLibrary.addElement("  Artist");
         JList libraryList = new JList(listModelLibrary);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 
-        DefaultListModel listModelplaylist = new DefaultListModel();//list of your all playlist
+        DefaultListModel listModelplaylist = new DefaultListModel();
         JList playlistList = new JList(listModelplaylist);
 
+        Dimension menuListDim = new Dimension(150, 70);
         Dimension libListdim = new Dimension(150, 70);
         Dimension playlisListdim = new Dimension(150, 300);
+        menuList.setPreferredSize(menuListDim);
         libraryList.setPreferredSize(libListdim);
         playlistList.setPreferredSize(playlisListdim);
 
-        JLabel library = new JLabel("Library");
-        Dimension LabelSize = new Dimension(150, 20);
+        JLabel Menu = new JLabel();
+        JLabel library = new JLabel(" YOUR LIBRARY");
+        Dimension LabelSize = new Dimension(150, 15);
         library.setPreferredSize(LabelSize);
 
-        JLabel playlistListLabel = new JLabel("Playlist");
+        JLabel playlistListLabel = new JLabel(" PLAYLIST");
         playlistListLabel.setPreferredSize(LabelSize);
 
+        leftPanel.add(Menu);
+        leftPanel.add(menuList);
         leftPanel.add(library);
         leftPanel.add(libraryList);
-        //leftPanel.add(scrollPane);
+        leftPanel.add(scrollPane);
         leftPanel.add(playlistListLabel);
         leftPanel.add(playlistList);
 
         JButton artworkP = new JButton();
         artworkP.setBackground(Color.lightGray);
         try {
-            BufferedImage img = ImageIO.read(new File("C:\\Users\\Mohammad Sadra\\IdeaProjects\\FP AP\\src\\artwork.jpg"));
-            BufferedImage fimg = new BufferedImage(150, 150, img.getType());
+            BufferedImage img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\2.jpg"));
+            BufferedImage fimg = new BufferedImage(150, 100, img.getType());
             artworkP.setIcon(new ImageIcon(img));
 
         } catch (Exception ex) {
