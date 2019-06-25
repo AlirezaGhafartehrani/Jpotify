@@ -1,9 +1,8 @@
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.*;
-import javazoom.jl.player.Player;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javax.sound.sampled.*;
+package Logic;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.AudioDevice;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
 import java.io.*;
 
@@ -18,20 +17,21 @@ public class AudioPlayer implements Runnable {
         frame = 0;
         isPause = false;
         this.song = song;
-
-        Player p = new Player(new FileInputStream(song.getPath()));
-
-
-        FloatControl volume= (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
-
-//        Player.getGainControl();
     }
 
-    public void playSong() throws JavaLayerException {
-        player.play();
+    public void playSong() throws JavaLayerException, FileNotFoundException {
+//        player.play();
 
+        player.play(50);
+        System.out.println("50");
 
-        //        while (player.play(1)) {
+        player.play(200);
+        System.out.println("200");
+
+        player.play(500);
+        System.out.println("500");
+
+//        while (player.play(1)) {
 //            System.out.println("played");
 //            if (false) {
 //                synchronized (player) {
@@ -54,7 +54,6 @@ public class AudioPlayer implements Runnable {
     }
 
     public void increaseSound() {
-
     }
 
     public void decreaseSound() {
@@ -85,12 +84,10 @@ public class AudioPlayer implements Runnable {
     }
 
 
-    public void setOutputVolume(float value)
-    {
+    public void setOutputVolume(float value) {
         String command = "set volume " + value;
-        try
-        {
-            ProcessBuilder pb = new ProcessBuilder("osascript","-e",command);
+        try {
+            ProcessBuilder pb = new ProcessBuilder("osascript", "-e", command);
             pb.directory(new File("/usr/bin"));
             StringBuffer output = new StringBuffer();
             Process p = pb.start();
@@ -98,14 +95,11 @@ public class AudioPlayer implements Runnable {
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
-            while ((line = reader.readLine())!= null)
-            {
+            while ((line = reader.readLine()) != null) {
                 output.append(line + "\n");
             }
             System.out.println(output);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
