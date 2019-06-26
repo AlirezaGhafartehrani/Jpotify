@@ -1,45 +1,42 @@
+package Logic;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Library {
-    private ArrayList<Song> allSongs;
+public class Library implements Serializable {
     private ArrayList<Album> albums;
-    private Album friendsActivity;
-    private Album favorites;
+    private Album miscellaneous;
+    private ArrayList<Song> allSongs;
 
-    Library() {
-        allSongs = new ArrayList<>();
+    public Library(ArrayList<Song> allSongs) {
+        this.allSongs = allSongs;
         albums = new ArrayList<>();
-        friendsActivity = new Album("Friends Activity");
-        favorites = new Album("Favorites");
+        miscellaneous = new Album("Miscellaneous");
     }
 
     public void updateLastPlayed(Song song) {
-        Song s = song;
-        allSongs.remove(song);
-        allSongs.add(allSongs.size(), s);
         for (Album a : albums)
             if (a.contains(song)) {
-                a.getSongs().remove(song);
-                a.getSongs().add(s);
-                Album aa = a;
+                Song s = song;
+                a.remove(song);
+                a.add(s);
+                Album album = a;
                 albums.remove(a);
-                albums.add(aa);
+                albums.add(a);
+                return;
             }
+        if (miscellaneous.contains(song)) {
+            Song s = song;
+            miscellaneous.remove(song);
+            miscellaneous.add(s);
+        }
     }
 
-    public void addSongToLibrary(Song song) {
-        allSongs.add(song);
-    }
-
-    public void createAlbumInLibrary(String albumName, ArrayList<Song> songs) {
+    public void createAlbum(String albumName, ArrayList<Song> songs) {
         Album album = new Album(albumName);
         for (Song s : songs)
-            album.addToAlbum(s);
+            album.add(s);
         albums.add(album);
-    }
-
-    public ArrayList<Song> getAllSongs() {
-        return allSongs;
     }
 
     public ArrayList<Song> getAlbum(String name) {
@@ -53,10 +50,12 @@ public class Library {
         for (Album a : albums)
             if (a.getName().equalsIgnoreCase(name))
                 return true;
-        if (name.equalsIgnoreCase("favorites") || name.equalsIgnoreCase("friends activity"))
+        if (name.equalsIgnoreCase("miscellaneous"))
             return true;
         return false;
     }
 
-
+    public ArrayList<Album> getAlbums() {
+        return albums;
+    }
 }
