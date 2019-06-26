@@ -1,18 +1,22 @@
+package Logic;
+
 import com.mpatric.mp3agic.Mp3File;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private String artist;
     private String title;
     private String album;
     private String path;
     private byte[] image;
+    private int frame;
+    private long length;
 
-    Song(String path) {
+    public Song(String path) {
         try {
             Mp3File mp3file = new Mp3File(path);
             this.path = path;
-
-            System.out.println("frames = "+mp3file.getFrameCount());
 
             // todo 128 byte akharo bekhon
             if (mp3file.hasId3v1Tag()) {
@@ -25,8 +29,11 @@ public class Song {
                 image = mp3file.getId3v2Tag().getAlbumImage();
             }
 
+            length = mp3file.getLength();
+            frame = mp3file.getFrameCount();
+
         } catch (Exception e) {
-            System.out.println("Song Song e1:\ncant open song");
+            System.out.println("Song Song e1:\n  cant open song");
         }
 
 
@@ -71,4 +78,10 @@ public class Song {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public int getFrame() {
+        return frame;
+    }
+
+
 }
