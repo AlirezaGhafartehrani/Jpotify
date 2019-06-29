@@ -1,3 +1,10 @@
+package GUI;
+
+import GUI.GUI;
+import DataBase.StaticControlVariables;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -5,7 +12,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+
 public class Frame {
+    
+   
+    
     private JFrame frame;
     private ArrayList<Object> centerPanelArrayList;
     private ArrayList<Object> eastPanelArrayList;
@@ -14,7 +25,7 @@ public class Frame {
     private ArrayList<Object> leftPanelArrayList;
 
 
-    public Frame() {
+    public Frame(GUI gui) {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(900, 556));
@@ -116,17 +127,37 @@ public class Frame {
         JPanel playerPanel = new JPanel(new FlowLayout());
         Dimension playerPanelSize = new Dimension(150, 100);
 
-        JButton play = new JButton();
+       JButton play = new JButton();
         Dimension playerButtonSize = new Dimension(44, 44);
         play.setPreferredSize(playerButtonSize);
         play.setBackground(Color.lightGray);
         try {
             Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\pause.png"));//didnt work?!
             play.setIcon(new ImageIcon(img));
-
+       
         } catch (Exception ex) {
             System.out.println("Image not found");
         }
+        
+             play.addActionListener((new java.awt.event.ActionListener() {
+            @Override      
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("salam");
+               if(StaticControlVariables.hasSong==false){
+                   System.out.println("No Song to play or pause");
+                   return;
+               } 
+               if(StaticControlVariables.isPlayed){
+                   StaticControlVariables.isPlayed=false;
+                   gui.setAction(2);
+                   
+               }else{
+                   StaticControlVariables.isPlayed=true;
+                   gui.setAction(3);
+               }
+               
+            }
+        }));
 
         JButton pNext = new JButton();
         pNext.setPreferredSize(playerButtonSize);
@@ -134,10 +165,17 @@ public class Frame {
         try {
             Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\next.png"));//didnt work?!
             pNext.setIcon(new ImageIcon(img));
-
         } catch (Exception ex) {
             System.out.println("Image not found");
         }
+     pNext.addActionListener((new java.awt.event.ActionListener() {
+            @Override      
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("salam pnext");
+                gui.setAction(4);
+            }
+        }));
+
 
         JButton privios = new JButton();
         privios.setPreferredSize(playerButtonSize);
@@ -145,10 +183,16 @@ public class Frame {
         try {
             Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\2.jpg"));//didnt work?!
             privios.setIcon(new ImageIcon(img));
-
         } catch (Exception ex) {
             System.out.println("Image not found");
         }
+        privios.addActionListener((new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("privious");
+                gui.setAction(5);
+            }
+        }));
 
         playerPanel.add(privios);
         playerPanel.add(play);
@@ -191,12 +235,29 @@ public class Frame {
         Dimension addLabel = new Dimension(60, 30);
         add.setPreferredSize(addLabel);
         add.setBackground(Color.lightGray);
+        add.addActionListener((new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // get song
+//                gui.setNewSongPath();
+                System.out.println("add");
+                gui.setAction(6);
+            }
+        }));
         northPanel.add(add);
         northPanel.setBackground(Color.lightGray);
         frame.add(northPanel, BorderLayout.NORTH);
         JButton signIn = new JButton("Sign in");
         signIn.setPreferredSize(addMtoL);
         signIn.setBackground(Color.lightGray);
+        signIn.addActionListener((new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                gui.setUserName();
+                System.out.println("sign in");
+                gui.setAction(16);
+            }
+        }));
         northPanel.add(signIn);
         JLabel profileIcon = new JLabel();
         try {
@@ -213,7 +274,22 @@ public class Frame {
         darkMode.setPreferredSize(addMtoL);
         darkMode.setBackground(Color.lightGray);
         northPanel.add(darkMode);
-
+        
+        //dark mode listener
+        darkMode.addActionListener((new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    if(StaticControlVariables.isDarkMode==false){
+                         System.out.println("changed to dark mode");
+                         StaticControlVariables.isDarkMode=true;
+                    }else{
+                         System.out.println("changed to light mode");
+                         StaticControlVariables.isDarkMode=false;
+                    }
+                   
+            }
+        }));
+        
 
         ///////////
 
@@ -222,7 +298,8 @@ public class Frame {
 
     }
 
-    public static void main(String[] args) {
-        Frame mainGraph = new Frame();
-    }
+//    public static void main(String[] args) {
+//        Frame mainGraph = new Frame();
+//    }
+
 }
