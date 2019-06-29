@@ -51,29 +51,3 @@ public class Server {
         return inetAddress;
     }
 }
-
-
-//    public static void main(String[] args) {
-//        Server server = null;
-//        try {
-//            server = new Server(12345);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        MP3Player mp3Player = new MP3Player();
-//        ArrayList<Song> songs = new ArrayList<>();
-//        songs.add(server.getFriendSong());
-//
-//        try {
-//            mp3Player.setSong(server.getFriendSong(),songs);
-//            mp3Player.playSong();
-//        } catch (JavaLayerException e) {
-//            e.printStackTrace();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
