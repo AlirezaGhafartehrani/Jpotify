@@ -22,6 +22,7 @@ public class Song implements Serializable {
 
     public Song(String path, Library library) {
         try {
+        
             Mp3File mp3file = new Mp3File(path);
 
             String temp = "";
@@ -29,8 +30,10 @@ public class Song implements Serializable {
                 temp += path.charAt(i);
             for (int i = temp.length() - 1; i > -1; i--)
                 name += temp.charAt(i);
-
-            this.path = "D:\\Codes\\AP\\JPotify\\src\\DataBase\\songs\\" + name + ".mp3";
+             
+//            System.out.println("--------- "+name);
+//            name="s"+Math.random();
+            this.path = ".\\src\\DataBase\\songs\\" + name + ".mp3";
 
             // todo 128 byte akharo bekhon
             if (mp3file.hasId3v1Tag()) {
