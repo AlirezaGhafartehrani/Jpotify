@@ -2,6 +2,7 @@ package GUI;
 
 import GUI.GUI;
 import DataBase.StaticControlVariables;
+import Logic.Song;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,26 +12,71 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashMap;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileSystemView;
 
 
 public class Frame {
-    
-   
-    
     private JFrame frame;
+    private JList friendList;
     private ArrayList<Object> centerPanelArrayList;
     private ArrayList<Object> eastPanelArrayList;
     private ArrayList<Object> northPanelArrayList;
     private ArrayList<Object> southPanelArrayList;
     private ArrayList<Object> leftPanelArrayList;
-
+    Song[] friendSongs;
 
     public Frame(GUI gui) {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(900, 556));
-        frame.setLayout (new BorderLayout());
-        frame.setLocation (250,100);
+        frame.setLayout(new BorderLayout());
+        frame.setLocation(250, 100);
+
+
+        Thread updateStatus = new Thread((new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //   System.out.println("updating status");
+                    HashMap<String, Song> friendsActivity = null;
+                    if (StaticControlVariables.netwrokManagerHandler != null) {
+                        friendsActivity = StaticControlVariables.netwrokManagerHandler.getFriendsActivity();
+                    }
+                    if (friendsActivity != null && !friendsActivity.isEmpty()) {
+                        String[] temp = new String[friendsActivity.size()];
+                        friendSongs = new Song[friendsActivity.size()];
+                        int i = 0;
+                        friendsActivity.forEach((friend, song) -> {
+                            temp[i] = friend + " -> " + song.getName();
+                            friendSongs[i] = song;
+                        });
+                        //      System.out.println(temp[0]);
+
+                        friendList.setModel(new javax.swing.AbstractListModel<String>() {
+                            String[] strings = temp;
+
+                            public int getSize() {
+                                return strings.length;
+                            }
+
+                            public String getElementAt(int i) {
+                                return strings[i];
+                            }
+                        });
+
+
+                    }
+                }
+            }
+        }));
+        updateStatus.start();
 
         //left panel
         JPanel leftPanel = new JPanel(new FlowLayout());
@@ -120,6 +166,29 @@ public class Frame {
         eastPanel.add(fActivity);
         frame.add(eastPanel, BorderLayout.EAST);
 
+        friendList = new JList(listModelplaylist);
+        friendList.setBackground(Color.WHITE);
+        Dimension friendListdim = new Dimension(150, 100);
+        friendList.setPreferredSize(friendListdim);
+        friendList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (friendList.getSelectedValue() == null) {
+                    System.out.println("No Item to select");
+                    return;
+                }
+                ArrayList<Song> temp1 = new ArrayList<Song>();
+                temp1.add(friendSongs[friendList.getSelectedIndex()]);
+                try {
+                    StaticControlVariables.mp3PlayerHandler.setSong(friendSongs[friendList.getSelectedIndex()], temp1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println(friendList.getSelectedValue().toString());
+            }
+        });
+        eastPanel.add(friendList);
+
+
         /////////South panel
 
         //Player Panel in southpanel
@@ -127,35 +196,35 @@ public class Frame {
         JPanel playerPanel = new JPanel(new FlowLayout());
         Dimension playerPanelSize = new Dimension(150, 100);
 
-       JButton play = new JButton();
+        JButton play = new JButton();
         Dimension playerButtonSize = new Dimension(44, 44);
         play.setPreferredSize(playerButtonSize);
         play.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\pause.png"));//didnt work?!
+            Image img = ImageIO.read(new File(".\\src\\DataBase\\play.jpg"));//didnt work?!
             play.setIcon(new ImageIcon(img));
-       
+
         } catch (Exception ex) {
             System.out.println("Image not found");
         }
-        
-             play.addActionListener((new java.awt.event.ActionListener() {
-            @Override      
+
+        play.addActionListener((new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("salam");
-               if(StaticControlVariables.hasSong==false){
-                   System.out.println("No Song to play or pause");
-                   return;
-               } 
-               if(StaticControlVariables.isPlayed){
-                   StaticControlVariables.isPlayed=false;
-                   gui.setAction(2);
-                   
-               }else{
-                   StaticControlVariables.isPlayed=true;
-                   gui.setAction(3);
-               }
-               
+                System.out.println("play/pause");
+                if (StaticControlVariables.hasSong == false) {
+                    System.out.println("No Song to play or pause");
+                    return;
+                }
+                if (StaticControlVariables.isPlayed) {
+                    StaticControlVariables.isPlayed = false;
+                    gui.setAction(2);
+
+                } else {
+                    StaticControlVariables.isPlayed = true;
+                    gui.setAction(3);
+                }
+
             }
         }));
 
@@ -163,13 +232,13 @@ public class Frame {
         pNext.setPreferredSize(playerButtonSize);
         pNext.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Desktop\\next.png"));//didnt work?!
+            Image img = ImageIO.read(new File(".\\src\\DataBase\\next.jpg"));//didnt work?!
             pNext.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println("Image not found");
         }
-     pNext.addActionListener((new java.awt.event.ActionListener() {
-            @Override      
+        pNext.addActionListener((new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("salam pnext");
                 gui.setAction(4);
@@ -181,7 +250,7 @@ public class Frame {
         privios.setPreferredSize(playerButtonSize);
         privios.setBackground(Color.lightGray);
         try {
-            Image img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\2.jpg"));//didnt work?!
+            Image img = ImageIO.read(new File(".\\src\\DataBase\\privious.jpg"));//didnt work?!
             privios.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println("Image not found");
@@ -202,8 +271,21 @@ public class Frame {
 
         //Song slider
         JSlider musicSlider = new JSlider();
-        Dimension musicSliderDim = new Dimension(600 ,30);
+        Dimension musicSliderDim = new Dimension(600, 30);
         southPanel.add(musicSlider, BorderLayout.CENTER);
+        //add for handling slider
+        musicSlider.setValue(0);
+        musicSlider.addChangeListener((new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                double percentageValue = (musicSlider.getValue()) / 100.0;
+                //    System.out.println(musicSlider.getValue());
+                //    System.out.println(percentageValue);
+                StaticControlVariables.currentFrame = percentageValue;
+                gui.setAction(1);
+            }
+        }));
+
 
         //Volume slider
         //JPanel speakers = new JPanel(new FlowLayout());
@@ -212,22 +294,22 @@ public class Frame {
         //Dimension voloumLabelDim = new Dimension(50,30);
         //volume.setPreferredSize(voloumLabelDim);
         JSlider voloum = new JSlider();
-        Dimension voloumDim = new Dimension(150,30);
+        Dimension voloumDim = new Dimension(150, 30);
         voloum.setPreferredSize(voloumDim);
 //        speakers.add(volume);
 //        speakers.add(voloum);
         southPanel.add(voloum, BorderLayout.EAST);
 
-        Dimension southPanelDim = new Dimension(900 , 100);
+        Dimension southPanelDim = new Dimension(900, 100);
         southPanel.setBackground(Color.lightGray);
         frame.add(southPanel, BorderLayout.SOUTH);
 
 
         // North
         JPanel northPanel = new JPanel(new FlowLayout());
-        Dimension northPanelDim = new Dimension(900 , 30);
+        Dimension northPanelDim = new Dimension(900, 30);
         northPanel.setPreferredSize(northPanelDim);
-        JLabel add_music_to_libraryLabel = new JLabel("Add Music To Library");
+        JLabel add_music_to_libraryLabel = new JLabel("Add And Remove Music");
         Dimension addMtoL = new Dimension(150, 30);
         add_music_to_libraryLabel.setPreferredSize(addMtoL);
         northPanel.add(add_music_to_libraryLabel);
@@ -241,12 +323,44 @@ public class Frame {
                 // get song
 //                gui.setNewSongPath();
                 System.out.println("add");
+                JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                int returnValue = jfc.showOpenDialog(null);
+
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = jfc.getSelectedFile();
+                    StaticControlVariables.pathOfAddSong = selectedFile.getAbsolutePath();
+                    System.out.println(selectedFile.getAbsolutePath());
+
+                }
                 gui.setAction(6);
             }
         }));
         northPanel.add(add);
         northPanel.setBackground(Color.lightGray);
         frame.add(northPanel, BorderLayout.NORTH);
+
+        JButton remove = new JButton("Remove");
+        Dimension removeLabel = new Dimension(80, 30);
+        remove.setPreferredSize(removeLabel);
+        remove.setBackground(Color.DARK_GRAY);
+        northPanel.add(remove);
+        remove.addActionListener((new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("romve");
+                JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                int returnValue = jfc.showOpenDialog(null);
+
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = jfc.getSelectedFile();
+                    StaticControlVariables.pathOfRemoveSong = selectedFile.getAbsolutePath();
+                    System.out.println(selectedFile.getAbsolutePath());
+
+                }
+                gui.setAction(7);
+            }
+        }));
+
         JButton signIn = new JButton("Sign in");
         signIn.setPreferredSize(addMtoL);
         signIn.setBackground(Color.lightGray);
@@ -260,36 +374,37 @@ public class Frame {
         }));
         northPanel.add(signIn);
         JLabel profileIcon = new JLabel();
-        try {
-            BufferedImage img = ImageIO.read(new File("C:\\Users\\Alireza Tehrani\\Pictures\\LifeFrame\\3.jpg"));
-            BufferedImage fimg = new BufferedImage(30, 30, img.getType());
-            profileIcon.setIcon(new ImageIcon(fimg));
+//        try {
+//            BufferedImage img = ImageIO.read(new File(""));
+//            BufferedImage fimg = new BufferedImage(30, 30, img.getType());
+//            profileIcon.setIcon(new ImageIcon(fimg));
+//
+//        } catch (Exception ex) {
+//            System.out.println("Image not found");
+//        }
 
-        } catch (Exception ex) {
-            System.out.println("Image not found");
-        }
         profileIcon.setPreferredSize(addLabel);
         northPanel.add(profileIcon);
         JCheckBox darkMode = new JCheckBox("Dark Mode");
         darkMode.setPreferredSize(addMtoL);
         darkMode.setBackground(Color.lightGray);
         northPanel.add(darkMode);
-        
+
         //dark mode listener
         darkMode.addActionListener((new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    if(StaticControlVariables.isDarkMode==false){
-                         System.out.println("changed to dark mode");
-                         StaticControlVariables.isDarkMode=true;
-                    }else{
-                         System.out.println("changed to light mode");
-                         StaticControlVariables.isDarkMode=false;
-                    }
-                   
+                if (StaticControlVariables.isDarkMode == false) {
+                    System.out.println("changed to dark mode");
+                    StaticControlVariables.isDarkMode = true;
+                } else {
+                    System.out.println("changed to light mode");
+                    StaticControlVariables.isDarkMode = false;
+                }
+
             }
         }));
-        
+
 
         ///////////
 
